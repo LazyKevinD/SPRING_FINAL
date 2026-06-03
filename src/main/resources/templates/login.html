@@ -19,27 +19,44 @@
         $(".msj").fadeOut(1500);
       }, 3000);
     });
-    const micrologin = 'https://spring-final-sdfe.onrender.com/auth/login'
+    const micrologin = 'https://abcc-springboot-login.onrender.com/auth/login'
+
     async function submitear(e) {
       e.preventDefault();
+
       const usr = document.getElementById('username').value;
       const pass = document.getElementById('password').value;
-      document.getElementById('btnSubmit').value = 'Autenticando...'
+
+      document.getElementById('btnSubmit').value = 'Autenticando...';
+
       fetch(micrologin, {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: usr, password: pass })
-      }).then(res => {
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ 
+          username: usr, 
+          password: pass 
+        })
+      })
+      .then(async res => {
         if (!res.ok) {
-          console.error( res.text());
+          const error = await res.text();
+          console.error(error);
+
           alert('Usuario o contraseña incorrectos, utilice: \nUsuario: Ras\nContraseña: Acrobacia');
-          
-          document.getElementById('btnSubmit').value = 'Ingresar'
+          document.getElementById('btnSubmit').value = 'Ingresar';
           return;
         }
+
         sessionStorage.setItem('logeado', 'true');
         window.location.href = '/';
       })
+      .catch(error => {
+        console.error(error);
+        alert('No se pudo conectar con el servidor');
+        document.getElementById('btnSubmit').value = 'Ingresar';
+      });
     }
   </script>
 </head>
